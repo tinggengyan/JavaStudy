@@ -18,101 +18,126 @@ public class ObservaleMain {
         test.setSubscriber();
     }
 
-    //1.基础的观察者，Observer 即观察者，它决定事件触发的时候将有怎样的行为。
-    Observer<String> observer = new Observer<String>() {
-        @Override
-        public void onCompleted() {
-            System.out.println("onCompleted");
-        }
+    //最基本的使用方式
+    private void simpleObserver() {
 
-        @Override
-        public void onError(Throwable e) {
-        }
+        //创建订阅者,Observer 即观察者，它决定事件触发的时候将有怎样的行为。
+        Subscriber<String> observer = new Subscriber<String>() {
 
-        @Override
-        public void onNext(String s) {
-            System.out.println("s = [" + s + "]");
-        }
-    };
+            @Override
+            public void onStart() {
+                super.onStart();
+                //还未发送消息之前调用
+            }
 
-    //2.观察者的封装,用法同上
-    Subscriber<String> subscriber = new Subscriber<String>() {
-        //事件还未发送之前被调用
-        @Override
-        public void onStart() {
-            super.onStart();
-            System.out.println("onStart");
-        }
+            @Override
+            public void onCompleted() {
+                //执行结束
+            }
 
-        @Override
-        public void onCompleted() {
-            System.out.println("onCompleted");
-        }
+            @Override
+            public void onError(Throwable e) {
+                //执行有错误
+            }
 
-        @Override
-        public void onError(Throwable e) {
-        }
+            @Override
+            public void onNext(String s) {
+                //传递消息到下一步
+                System.out.println(s);
+            }
+        };
 
-        @Override
-        public void onNext(String s) {
-            System.out.println("s = [" + s + "]");
-        }
-    };
-
-    //1.基本的被观察者,Observable 即被观察者，它决定什么时候触发事件以及触发怎样的事件。 RxJava 使用 create() 方法来创建一个 Observable ，并为它定义事件触发规则
-    Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
-        @Override
-        public void call(Subscriber<? super String> subscriber) {
-            subscriber.onNext("Hello");
-            subscriber.onNext("Hi");
-            subscriber.onNext("Aloha");
-            subscriber.onCompleted();
-        }
-    });
-
-    //2.被观察者，事件依次处理
-    Observable observable2 = Observable.just("1", "2", "3");
-
-    //3.将数组拆封之后，依次调用
-    String[] words = {"Hello", "Hi", "Aloha"};
-    Observable observable3 = Observable.from(words);
+        //创建Observable
+        Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
+            //事件的触发规则
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                subscriber.onNext("he1");
+                subscriber.onNext("he2");
+                subscriber.onNext("he3");
+                subscriber.onCompleted();
+            }
+        });
+        observable.subscribe(observer);
+    }
 
 
-    //Action   会自动根据定义创建出 Subscriber
-    //Action0 代表了无参的方法
-    Action0 onCompletedAction = new Action0() {
-        @Override
-        public void call() {
-            System.out.println("onCompletedAction");
-        }
-    };
+    // 快捷创建事件队列: just:将传入的参数依次发送出来
+    private void simpleJust() {
+        String[] words = {"1", "2", "3"};
+        Subscriber subscriber = new Subscriber<String>() {
 
-    //Action1代表了有一个参数的方法
-    Action1<String> onNextAction = new Action1<String>() {
-        @Override
-        public void call(String o) {
-            System.out.println("onNextAction");
-        }
-    };
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
 
-    Action1<Throwable> onErrorAction = new Action1<Throwable>() {
-        @Override
-        public void call(Throwable o) {
-            System.out.println("onErrorAction");
-        }
-    };
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                System.out.println("simple just :" + s);
+            }
+        };
+
+        Observable.just(words).subscribe(subscriber);
+    }
+
+    // 快捷创建事件队列: from:将传入的数组或 Iterable 拆分成具体对象后，依次发送出来。
+    private void simpleFrom() {
+        Action1 action1 = new Action1() {
+            @Override
+            public void call(Object o) {
+                System.out.println(o.toString());
+            }
+        };
+        String[] words = {"Hello", "Hi", "Aloha"};
+        Observable observable = Observable.from(words);
+        observable.subscribe(action1);
+    }
+
+
+    //简单的使用action这个接口
+    private void simpleAction() {
+        //简单的使用Action1这个接口，来变现单个参数的观察者参数
+        //所有只含有一个参数的回调都可以用这个简单的接口
+        Action1 onNextAction = new Action1() {
+            @Override
+            public void call(Object o) {
+                System.out.println("next:" + o.toString());
+            }
+        };
+
+        Action1 onErrorAction = new Action1() {
+            @Override
+            public void call(Object o) {
+                System.out.println("error:" + o.toString());
+            }
+        };
+        //对于无参的回调，则可以用Action0这个接口简单的实现
+        Action0 onCompletedAction = new Action0() {
+            @Override
+            public void call() {
+                System.out.println("Complete");
+            }
+        };
+        String[] words = {"Hello", "Hi", "Aloha"};
+        Observable observable = Observable.from(words);
+        observable.subscribe(onNextAction);
+        observable.subscribe(onNextAction, onErrorAction);
+        observable.subscribe(onNextAction, onErrorAction, onCompletedAction);
+    }
 
 
     private void setSubscriber() {
-        //常规的订阅
-//        observable.subscribe(observer);
-//        observable2.subscribe(subscriber);
-//        observable3.subscribe(subscriber);
-        //自动创建的
-//        observable.subscribe(onNextAction);
-//        observable.subscribe(onNextAction,onErrorAction);
-//        observable.subscribe(onNextAction,onErrorAction,onCompletedAction);
-
     }
 
 
