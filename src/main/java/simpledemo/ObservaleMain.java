@@ -18,7 +18,7 @@ public class ObservaleMain {
         test.setSubscriber();
     }
 
-    //1.基础的观察者
+    //1.基础的观察者，Observer 即观察者，它决定事件触发的时候将有怎样的行为。
     Observer<String> observer = new Observer<String>() {
         @Override
         public void onCompleted() {
@@ -59,7 +59,7 @@ public class ObservaleMain {
         }
     };
 
-    //1.基本的被观察者
+    //1.基本的被观察者,Observable 即被观察者，它决定什么时候触发事件以及触发怎样的事件。 RxJava 使用 create() 方法来创建一个 Observable ，并为它定义事件触发规则
     Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
         @Override
         public void call(Subscriber<? super String> subscriber) {
