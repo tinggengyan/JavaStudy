@@ -1,30 +1,31 @@
 package Thread;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 /**
- * CallableºÍFuture£¬ËüÁ©ºÜÓĞÒâË¼µÄ£¬Ò»¸ö²úÉú½á¹û£¬Ò»¸öÄÃµ½½á¹û¡£
- * Callable½Ó¿ÚÀàËÆÓÚRunnable£¬´ÓÃû×Ö¾Í¿ÉÒÔ¿´³öÀ´ÁË£¬µ«ÊÇRunnable²»»á·µ»Ø½á¹û£¬²¢ÇÒÎŞ·¨Å×³ö·µ»Ø½á¹ûµÄÒì³££¬
- * ¶øCallable¹¦ÄÜ¸üÇ¿´óÒ»Ğ©£¬ ±»Ïß³ÌÖ´ĞĞºó£¬¿ÉÒÔ·µ»ØÖµ£¬Õâ¸ö·µ»ØÖµ¿ÉÒÔ±»FutureÄÃµ½£¬
- * Ò²¾ÍÊÇËµ£¬Future¿ÉÒÔÄÃµ½Òì²½Ö´ĞĞÈÎÎñµÄ·µ»ØÖµ
+ * Callableå’ŒFutureï¼Œå®ƒä¿©å¾ˆæœ‰æ„æ€çš„ï¼Œä¸€ä¸ªäº§ç”Ÿç»“æœï¼Œä¸€ä¸ªæ‹¿åˆ°ç»“æœã€‚
+ * Callableæ¥å£ç±»ä¼¼äºRunnableï¼Œä»åå­—å°±å¯ä»¥çœ‹å‡ºæ¥äº†ï¼Œä½†æ˜¯Runnableä¸ä¼šè¿”å›ç»“æœï¼Œå¹¶ä¸”æ— æ³•æŠ›å‡ºè¿”å›ç»“æœçš„å¼‚å¸¸ï¼Œ
+ * è€ŒCallableåŠŸèƒ½æ›´å¼ºå¤§ä¸€äº›ï¼Œ è¢«çº¿ç¨‹æ‰§è¡Œåï¼Œå¯ä»¥è¿”å›å€¼ï¼Œè¿™ä¸ªè¿”å›å€¼å¯ä»¥è¢«Futureæ‹¿åˆ°ï¼Œ
+ * ä¹Ÿå°±æ˜¯è¯´ï¼ŒFutureå¯ä»¥æ‹¿åˆ°å¼‚æ­¥æ‰§è¡Œä»»åŠ¡çš„è¿”å›å€¼
  * <p/>
  * Created by yantinggeng on 2015/11/5.
  */
 public class CallableMain {
 
     public static void main(String[] args) {
+    }
 
-        //ÀàËÆÓÚRunnable£¬¶¨ÒåÁËÈÎÎñµÄÄÚÈİ£¬ÕâÀïÊÇ·µ»ØËæ»úÊı,Õâ¸öÊÇÓĞ·µ»ØÖµIntegerµÄ
+    public static void simple() {
+        //1.åŸºæœ¬çš„
+        //ç±»ä¼¼äºRunnableï¼Œå®šä¹‰äº†ä»»åŠ¡çš„å†…å®¹ï¼Œè¿™é‡Œæ˜¯è¿”å›éšæœºæ•°,è¿™ä¸ªæ˜¯æœ‰è¿”å›å€¼Integerçš„
         Callable<Integer> callable = new Callable<Integer>() {
             public Integer call() throws Exception {
                 return new Random().nextInt(100);
             }
         };
 
-        //ÓÃÒÔÈ¡µÃCallableµÄ·µ»ØÖµ
+        //ç”¨ä»¥å–å¾—Callableçš„è¿”å›å€¼
         FutureTask<Integer> future = new FutureTask<Integer>(callable);
         new Thread(future).start();
 
@@ -35,6 +36,55 @@ public class CallableMain {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        }
+    }
+
+    //2. é‡‡ç”¨çº¿ç¨‹æ± çš„å½¢å¼
+    public static void simpleExecutor() {
+        Callable<Integer> callable = new Callable<Integer>() {
+            public Integer call() throws Exception {
+                return new Random().nextInt(100);
+            }
+        };
+        //   é‡‡ç”¨çº¿ç¨‹æ± çš„å½¢å¼,ExecutorServiceç»§æ‰¿è‡ªExecutorï¼Œå®ƒçš„ç›®çš„æ˜¯ä¸ºæˆ‘ä»¬ç®¡ç†Threadå¯¹è±¡ï¼Œä»è€Œç®€åŒ–å¹¶å‘ç¼–ç¨‹ï¼Œ
+        //   Executorä½¿æˆ‘ä»¬æ— éœ€æ˜¾ç¤ºçš„å»ç®¡ç†çº¿ç¨‹çš„ç”Ÿå‘½å‘¨æœŸï¼Œæ˜¯JDK 5ä¹‹åå¯åŠ¨ä»»åŠ¡çš„é¦–é€‰æ–¹å¼ã€‚
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        Future<Integer> future2 = threadPool.submit(callable);
+        try {
+            //TODO do anything
+            System.out.println(future2.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //3. è¿”å›å¤šä¸ªå€¼ï¼Œå–å¤šä¸ªå€¼
+    public static void multilValue() {
+        ExecutorService threadPoolCache = Executors.newCachedThreadPool();
+        CompletionService<Integer> cs = new ExecutorCompletionService<Integer>(threadPoolCache);
+        for (int i = 0; i < 5; i++) {
+            final int taskID = i;
+            cs.submit(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    return taskID;
+                }
+            });
+        }
+
+        //TODO do anything
+        for (int i = 0; i < 5; i++) {
+            try {
+                //å°†å€¼å–å‡º
+                System.out.println(cs.take().get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
 
 

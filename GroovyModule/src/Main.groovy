@@ -1,11 +1,11 @@
-//1.打印内容
+//1.鎵撳嵃鍐呭
 println("Hello world!");
-//2. 变量运算
+//2. 鍙橀噺杩愮畻
 int a = 3;
 int b = 20;
 println(a + b)
 
-//3. 文件读取
+//3. 鏂囦欢璇诲彇
 String baseDir = "F:\\";
 String fileName = "Hello.txt";
 

@@ -7,7 +7,7 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
- * »ù´¡Àí½â
+ * åŸºç¡€ç†è§£
  * <p/>
  * Created by yantinggeng on 2015/10/19.
  */
@@ -18,38 +18,38 @@ public class ObservaleMain {
         test.setSubscriber();
     }
 
-    //×î»ù±¾µÄÊ¹ÓÃ·½Ê½
+    //æœ€åŸºæœ¬çš„ä½¿ç”¨æ–¹å¼
     private void simpleObserver() {
 
-        //´´½¨¶©ÔÄÕß,Observer ¼´¹Û²ìÕß£¬Ëü¾ö¶¨ÊÂ¼ş´¥·¢µÄÊ±ºò½«ÓĞÔõÑùµÄĞĞÎª¡£
+        //åˆ›å»ºè®¢é˜…è€…,Observer å³è§‚å¯Ÿè€…ï¼Œå®ƒå†³å®šäº‹ä»¶è§¦å‘çš„æ—¶å€™å°†æœ‰æ€æ ·çš„è¡Œä¸ºã€‚
         Subscriber<String> observer = new Subscriber<String>() {
 
             @Override
             public void onStart() {
                 super.onStart();
-                //»¹Î´·¢ËÍÏûÏ¢Ö®Ç°µ÷ÓÃ
+                //è¿˜æœªå‘é€æ¶ˆæ¯ä¹‹å‰è°ƒç”¨
             }
 
             @Override
             public void onCompleted() {
-                //Ö´ĞĞ½áÊø
+                //æ‰§è¡Œç»“æŸ
             }
 
             @Override
             public void onError(Throwable e) {
-                //Ö´ĞĞÓĞ´íÎó
+                //æ‰§è¡Œæœ‰é”™è¯¯
             }
 
             @Override
             public void onNext(String s) {
-                //´«µİÏûÏ¢µ½ÏÂÒ»²½
+                //ä¼ é€’æ¶ˆæ¯åˆ°ä¸‹ä¸€æ­¥
                 System.out.println(s);
             }
         };
 
-        //´´½¨Observable
+        //åˆ›å»ºObservable
         Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
-            //ÊÂ¼şµÄ´¥·¢¹æÔò
+            //äº‹ä»¶çš„è§¦å‘è§„åˆ™
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 subscriber.onNext("he1");
@@ -62,7 +62,7 @@ public class ObservaleMain {
     }
 
 
-    // ¿ì½İ´´½¨ÊÂ¼ş¶ÓÁĞ: just:½«´«ÈëµÄ²ÎÊıÒÀ´Î·¢ËÍ³öÀ´
+    // å¿«æ·åˆ›å»ºäº‹ä»¶é˜Ÿåˆ—: just:å°†ä¼ å…¥çš„å‚æ•°ä¾æ¬¡å‘é€å‡ºæ¥
     private void simpleJust() {
         String[] words = {"1", "2", "3"};
         Subscriber subscriber = new Subscriber<String>() {
@@ -91,7 +91,7 @@ public class ObservaleMain {
         Observable.just(words).subscribe(subscriber);
     }
 
-    // ¿ì½İ´´½¨ÊÂ¼ş¶ÓÁĞ: from:½«´«ÈëµÄÊı×é»ò Iterable ²ğ·Ö³É¾ßÌå¶ÔÏóºó£¬ÒÀ´Î·¢ËÍ³öÀ´¡£
+    // å¿«æ·åˆ›å»ºäº‹ä»¶é˜Ÿåˆ—: from:å°†ä¼ å…¥çš„æ•°ç»„æˆ– Iterable æ‹†åˆ†æˆå…·ä½“å¯¹è±¡åï¼Œä¾æ¬¡å‘é€å‡ºæ¥ã€‚
     private void simpleFrom() {
         Action1 action1 = new Action1() {
             @Override
@@ -105,10 +105,10 @@ public class ObservaleMain {
     }
 
 
-    //¼òµ¥µÄÊ¹ÓÃactionÕâ¸ö½Ó¿Ú
+    //ç®€å•çš„ä½¿ç”¨actionè¿™ä¸ªæ¥å£
     private void simpleAction() {
-        //¼òµ¥µÄÊ¹ÓÃAction1Õâ¸ö½Ó¿Ú£¬À´±äÏÖµ¥¸ö²ÎÊıµÄ¹Û²ìÕß²ÎÊı
-        //ËùÓĞÖ»º¬ÓĞÒ»¸ö²ÎÊıµÄ»Øµ÷¶¼¿ÉÒÔÓÃÕâ¸ö¼òµ¥µÄ½Ó¿Ú
+        //ç®€å•çš„ä½¿ç”¨Action1è¿™ä¸ªæ¥å£ï¼Œæ¥å˜ç°å•ä¸ªå‚æ•°çš„è§‚å¯Ÿè€…å‚æ•°
+        //æ‰€æœ‰åªå«æœ‰ä¸€ä¸ªå‚æ•°çš„å›è°ƒéƒ½å¯ä»¥ç”¨è¿™ä¸ªç®€å•çš„æ¥å£
         Action1 onNextAction = new Action1() {
             @Override
             public void call(Object o) {
@@ -122,7 +122,7 @@ public class ObservaleMain {
                 System.out.println("error:" + o.toString());
             }
         };
-        //¶ÔÓÚÎŞ²ÎµÄ»Øµ÷£¬Ôò¿ÉÒÔÓÃAction0Õâ¸ö½Ó¿Ú¼òµ¥µÄÊµÏÖ
+        //å¯¹äºæ— å‚çš„å›è°ƒï¼Œåˆ™å¯ä»¥ç”¨Action0è¿™ä¸ªæ¥å£ç®€å•çš„å®ç°
         Action0 onCompletedAction = new Action0() {
             @Override
             public void call() {

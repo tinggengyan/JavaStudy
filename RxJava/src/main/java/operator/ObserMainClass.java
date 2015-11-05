@@ -10,7 +10,7 @@ import rx.functions.Func1;
 public class ObserMainClass {
     public static void main(String[] args) {
 
-        //1. map,map() ÊÇÒ»¶ÔÒ»µÄ×ª»¯
+        //1. map,map() æ˜¯ä¸€å¯¹ä¸€çš„è½¬åŒ–
         Observable observable = Observable.just("111", "222");
         Action1 action1 = new Action1() {
             @Override
@@ -18,7 +18,7 @@ public class ObserMainClass {
                 System.out.println(o.toString());
             }
         };
-        //ÖĞ¼ä²ã´¦Àí×ª·¢,¿ÉÒÔ×ª»»·µ»ØÖµ£¬ÕâÑùobserver¾Í¿ÉÒÔ´¦Àí±ğµÄ·µ»ØÖµÁË
+        //ä¸­é—´å±‚å¤„ç†è½¬å‘,å¯ä»¥è½¬æ¢è¿”å›å€¼ï¼Œè¿™æ ·observerå°±å¯ä»¥å¤„ç†åˆ«çš„è¿”å›å€¼äº†
         Func1 func = new Func1() {
             @Override
             public Object call(Object o) {
@@ -27,7 +27,7 @@ public class ObserMainClass {
         };
         observable.map(func).subscribe(action1);
 
-        //2. flatMap,Ò»¶Ô¶àµÄ×ª»¯,´Ë´¦µÄdemo£¬studentµÄcourseÊı×é½«±»²ğ·Ö³ÉÒ»¸ö¸ö¶ÔÏó·Ö±ğ±»Ö´ĞĞ
+        //2. flatMap,ä¸€å¯¹å¤šçš„è½¬åŒ–,æ­¤å¤„çš„demoï¼Œstudentçš„courseæ•°ç»„å°†è¢«æ‹†åˆ†æˆä¸€ä¸ªä¸ªå¯¹è±¡åˆ†åˆ«è¢«æ‰§è¡Œ
         final Course[] courses = {new Course(1, "A"), new Course(2, "B"), new Course(3, "C")};
         Course[] courses2 = {new Course(4, "D"), new Course(5, "E"), new Course(6, "F")};
         Student[] students = {new Student(1, courses), new Student(2, courses2)};
