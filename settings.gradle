@@ -1,4 +1,5 @@
 rootProject.name = 'JavaTest'
 include 'RxJava'
 include 'RxJava'
+include 'BasicJava'
 
