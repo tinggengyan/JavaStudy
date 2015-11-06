@@ -16,3 +16,19 @@ String fileName = "Hello.txt";
 String path=new File(baseDir,fileName).absolutePath;
 println(path);
 
+
+//定义一个函数，有一个参数的函数
+def func1={
+    it->println(it);
+}
+
+func1(2);
+
+//含有两个参数的函数
+def func2={
+    it1,it2->
+        print(it1+it2)
+}
+
+func2(1,2);
+
