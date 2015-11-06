@@ -39,3 +39,5 @@ resources/templates.list
 build/
 build.properties
 junit*.properties
+
+.gradle/
