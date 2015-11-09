@@ -1,0 +1,102 @@
+group 'cn.steve'
+version '1.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+println 'This is executed during the configuration phase.(编译配置阶段)'
+
+task configured {
+    println 'This is also executed during the configuration phase.(编译配置阶段)'
+}
+
+//一个含有action的task，如下，也是在执行对应的task的时候才会被执行
+task test2 << {
+    println 'This is executed during the execution phase.(编译执行阶段)'
+}
+
+task testBoth {
+    //这些都是task对应的action，只有在执行testBoth的时候，这部分action才会被执行
+    doFirst {
+        println 'This is executed first during the execution phase.(编译执行阶段)'
+    }
+    doLast {
+        println 'This is executed last during the execution phase.(编译执行阶段)'
+    }
+    //无action部分，无论执行什么task，这部分都会被执行，因为这部分是在编译的配置阶段完成的。
+    println 'This is executed during the configuration phase as well.(编译配置阶段)'
+}
+
+//创建两个相互关联的task
+task taskX(dependsOn: 'taskY') << {
+    println("taskX")
+}
+
+task taskY() << {
+    println 'taskY'
+}
+
+//对比，这个是没有相互依赖关系的
+task taskxx() << {
+    println("hello world")
+}
+
+//注：前面的数字是不可省略的，代表了任务的个人，这里代表是0-3一共四个
+4.times { counter ->
+    task "task$counter" << {
+        println "i am task number $counter"
+    }
+}
+
+//使用已存在任务task,表示了task0依赖于task2和task3
+task0.dependsOn task2, task3
+
+//通过API为任务加入一些新行为
+task hello << {
+    println 'Hello Earth'
+}
+hello.doFirst {
+    println 'Hello Venus'
+}
+hello.doLast {
+    println 'Hello Mars'
+}
+hello<<{
+    println("hello steve yan")
+}
+//doFirst和doLast可以被执行多次，<<操作符实质就是doLast
+
+//任务task短标记
+//我们可以通过美元符将一个task作为另一个task的属性
+hello<<{
+    println("Hello: $hello.name")
+}
+
+//自定义任务task属性
+task myTask{
+    ext.myProperty ="myValue"
+}
+
+task printTaskProperties<<{
+    println myTask.myProperty
+}
+
+
+//定义默认任务task
+defaultTasks "customclean","customrun"
+task customclean << {
+    println "Default Cleaning!"
+}
+
+task customrun << {
+    println "Default Running!"
+}
