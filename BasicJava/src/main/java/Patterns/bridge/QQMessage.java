@@ -1,22 +1,23 @@
-package Patterns;
+package Patterns.bridge;
 
 /**
  * Created by yantinggeng on 2015/11/12.
  */
-public class WeixinMessage implements IMessage {
-    private String string;
-    private ISendMessage sendMessage;
+public class QQMessage implements IMessage {
 
-    public WeixinMessage(String string, ISendMessage sendMessage) {
-        this.string = string;
+    private ISendMessage sendMessage;
+    private String string;
+
+    public QQMessage(ISendMessage sendMessage, String string) {
         this.sendMessage = sendMessage;
+        this.string = string;
     }
 
     @Override
     public void sendMessage() {
 
         sendMessage.sendMessage(string);
-
+        
     }
 
     @Override

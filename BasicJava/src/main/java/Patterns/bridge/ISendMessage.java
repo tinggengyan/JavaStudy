@@ -1,4 +1,4 @@
-package Patterns;
+package Patterns.bridge;
 
 /**
  * 桥接模式中：行为的抽象

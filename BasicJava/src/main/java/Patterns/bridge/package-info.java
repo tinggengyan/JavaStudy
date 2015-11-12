@@ -6,4 +6,4 @@
  * <p/>
  * Created by yantinggeng on 2015/11/12.
  */
-package Patterns;
+package Patterns.bridge;
