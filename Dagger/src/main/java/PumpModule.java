@@ -11,7 +11,7 @@ import java.util.TreeMap;
         complete = false,
         library = true
 )
-public class PumpModule {
+class PumpModule {
     @Provides
     Pump providePump(Thermosiphon pump) {
         return pump;

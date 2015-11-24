@@ -12,7 +12,7 @@ import javax.inject.Singleton;
         injects = CoffeeApp.class,
         includes = PumpModule.class
 )
-public class DripCoffeeModule {
+class DripCoffeeModule {
 
     @Provides
     @Singleton

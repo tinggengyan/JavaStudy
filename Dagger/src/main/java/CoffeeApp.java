@@ -18,9 +18,6 @@ public class CoffeeApp implements Runnable {
         ObjectGraph objectGraph = ObjectGraph.create(new DripCoffeeModule());
         CoffeeApp coffeeApp = objectGraph.get(CoffeeApp.class);
         coffeeApp.run();
-
-
-
     }
 
 }
