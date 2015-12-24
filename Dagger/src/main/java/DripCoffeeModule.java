@@ -16,7 +16,7 @@ class DripCoffeeModule {
 
     @Provides
     @Singleton
-    Heater providerHeater() {
+    Heater provideHeater() {
         return new ElectricHeater();
     }
 

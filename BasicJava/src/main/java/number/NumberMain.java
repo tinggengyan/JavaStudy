@@ -9,10 +9,14 @@ public class NumberMain {
 
     //被除数为浮点数的结果
     public static void main(String[] args) {
-        int delta = 2;
-        float total = 10 * 1.2f;
-        float result = (total - delta) / total;
-        System.out.println(result);
+//        int delta = 2;
+//        float total = 10 * 1.2f;
+//        float result = (total - delta) / total;
+//        System.out.println(result);
+
+        double dou1 = 84.62198;
+        double dou2 = 84.620896;
+        System.out.println((dou1 - dou2)/2);
 
     }
 }
