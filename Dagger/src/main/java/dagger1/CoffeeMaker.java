@@ -1,3 +1,5 @@
+package dagger1;
+
 import dagger.Lazy;
 
 import javax.inject.Inject;

@@ -1,3 +1,5 @@
+package dagger1;
+
 import dagger.ObjectGraph;
 
 import javax.inject.Inject;

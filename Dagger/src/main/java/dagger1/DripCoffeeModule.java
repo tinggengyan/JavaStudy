@@ -1,3 +1,5 @@
+package dagger1;
+
 import dagger.Module;
 import dagger.Provides;
 

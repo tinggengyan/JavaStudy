@@ -1,3 +1,5 @@
+package dagger1;
+
 import javax.inject.Inject;
 
 /**
