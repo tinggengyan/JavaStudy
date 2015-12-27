@@ -1,6 +1,8 @@
 group 'cn.steve'
 version '1.0'
 apply plugin: 'java'
+
+
 sourceCompatibility = 1.5
 
 repositories {
@@ -9,8 +11,6 @@ repositories {
 configurations { providedCompile }
 
 dependencies {
-    def daggerVersion = '1.2.2'
-    compile "com.squareup.dagger:dagger:$daggerVersion"
-    providedCompile "com.squareup.dagger:dagger-compiler:$daggerVersion"
+    compile "com.google.dagger:dagger:2.0.2"
+    providedCompile "com.google.dagger:dagger-compiler:2.0.2"
 }
-

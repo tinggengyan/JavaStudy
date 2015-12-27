@@ -7,4 +7,5 @@ include 'RxJava'
 include 'BasicJava'
 include 'GradleTest'
 include 'Dagger'
+include 'Dagger2'
 
