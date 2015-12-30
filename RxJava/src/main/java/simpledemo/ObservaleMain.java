@@ -16,7 +16,8 @@ public class ObservaleMain {
     public static void main(String[] args) {
         ObservaleMain test = new ObservaleMain();
 //        test.setSubscriber();
-        test.simpleConcat();
+//        test.simpleConcat();
+        test.flatMapVersion();
     }
 
     //最基本的使用方式
@@ -227,19 +228,20 @@ public class ObservaleMain {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 System.out.println("读取缓存内容");
-
                 if (hasCache) {
                     System.out.println("有缓存，即将显示页面");
+                    subscriber.onNext("Has cache");
                 } else {
                     System.out.println("没有缓存");
+                    subscriber.onNext("No cache");
                 }
-
             }
         });
 
-        cache.flatMap(new Func1<String, Observable<String>>() {
+        Observable<String> stringObservable = cache.flatMap(new Func1<String, Observable<String>>() {
             @Override
-            public Observable<String> call(String s) {
+            public Observable<String> call(final String s) {
+                System.out.println("Func1:" + s);
                 //根据缓存的有无，构造下一个事件源
                 if (s != null) {
                     //TODO 有缓存，接下来进行version的比对
@@ -247,8 +249,7 @@ public class ObservaleMain {
                         @Override
                         public void call(Subscriber<? super String> subscriber) {
                             //TODO 比对version
-
-
+                            subscriber.onNext(s);
                         }
                     });
                 } else {
@@ -256,14 +257,19 @@ public class ObservaleMain {
                         @Override
                         public void call(Subscriber<? super String> subscriber) {
                             //TODO 直接获取全部的内容，存储，更新界面
-
-
+                            subscriber.onNext(s);
                         }
                     });
                 }
             }
         });
 
+        stringObservable.subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println("Next :" + s);
+            }
+        });
 
     }
 
