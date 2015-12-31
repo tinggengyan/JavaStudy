@@ -16,9 +16,10 @@ public class ObservaleMain {
     public static void main(String[] args) {
         ObservaleMain test = new ObservaleMain();
 //        test.setSubscriber();
-        test.simpledoOnNext();
+//        test.simpledoOnNext();
 //        test.simpleConcat();
 //        test.flatMapVersion();
+        test.simpleStart();
     }
 
     //最基本的使用方式
@@ -287,6 +288,33 @@ public class ObservaleMain {
             @Override
             public void call(Object o) {
                 System.out.println(o.toString());
+            }
+        });
+    }
+
+
+    private void simpleStart() {
+        Observable observable = Observable.just("2", "aa");
+        observable.startWith(Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                subscriber.onNext("Hello");
+                subscriber.onCompleted();
+            }
+        })).subscribe(new Action1() {
+            @Override
+            public void call(Object o) {
+                System.out.println("value:" + o.toString());
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                System.out.println("Complete");
             }
         });
     }
