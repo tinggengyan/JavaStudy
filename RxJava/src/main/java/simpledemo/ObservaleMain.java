@@ -16,7 +16,7 @@ public class ObservaleMain {
     public static void main(String[] args) {
         ObservaleMain test = new ObservaleMain();
 //        test.setSubscriber();
-        test.simpleConcat();
+        test.simpledoOnNext();
     }
 
     //最基本的使用方式
@@ -266,6 +266,26 @@ public class ObservaleMain {
 
 
     }
+
+    //测试doOnNext()
+    private void simpledoOnNext(){
+        String[] strings={"a","b"};
+        Observable observable=Observable.from(strings).doOnNext(new Action1() {
+            @Override
+            public void call(Object o) {
+                System.out.println(o.toString()+"即将进入订阅者");
+            }
+        });
+        observable.subscribe(new Action1() {
+            @Override
+            public void call(Object o) {
+                System.out.println(o.toString());
+            }
+        });
+    }
+
+
+
 
 
 }
