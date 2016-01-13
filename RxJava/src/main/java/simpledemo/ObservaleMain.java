@@ -1,10 +1,10 @@
 package simpledemo;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * 基础理解
@@ -15,7 +15,7 @@ public class ObservaleMain {
 
     public static void main(String[] args) {
         ObservaleMain test = new ObservaleMain();
-        test.simpleStart();
+        test.simpleOnCompleteAndOnError();
     }
 
     //最基本的使用方式
@@ -185,5 +185,34 @@ public class ObservaleMain {
         });
     }
 
+    //doOnComplete and doOnError
+    private void simpleOnCompleteAndOnError(){
+        Observable.just("a","b").doOnCompleted(new Action0() {
+            @Override
+            public void call() {
+                System.out.println("doOnCompleted");
+            }
+        }).doOnError(new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                System.out.println("doOnError");
+            }
+        }).subscribe(new Observer<String>() {
+            @Override
+            public void onCompleted() {
+                System.out.println("onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                System.out.println("onError");
+            }
+
+            @Override
+            public void onNext(String s) {
+                System.out.println("onNext");
+            }
+        });
+    }
 
 }
