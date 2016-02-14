@@ -14,6 +14,7 @@ import java.util.concurrent.*;
 public class CallableMain {
 
     public static void main(String[] args) {
+        simple();
     }
 
     public static void simple() {
@@ -21,6 +22,7 @@ public class CallableMain {
         //类似于Runnable，定义了任务的内容，这里是返回随机数,这个是有返回值Integer的
         Callable<Integer> callable = new Callable<Integer>() {
             public Integer call() throws Exception {
+                Thread.sleep(5000);
                 return new Random().nextInt(100);
             }
         };
@@ -32,6 +34,7 @@ public class CallableMain {
         try {
             // TODO do anything
             System.out.println(future.get());
+            System.out.println("会造成当前的线程阻塞，等待返回值");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
