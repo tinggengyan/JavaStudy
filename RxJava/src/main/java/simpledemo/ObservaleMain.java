@@ -6,6 +6,8 @@ import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 基础理解
  * <p/>
@@ -15,7 +17,8 @@ public class ObservaleMain {
 
     public static void main(String[] args) {
         ObservaleMain test = new ObservaleMain();
-        test.simpleOnCompleteAndOnError();
+//        test.simpleOnCompleteAndOnError();
+        test.simpleTimer();
     }
 
     //最基本的使用方式
@@ -211,6 +214,26 @@ public class ObservaleMain {
             @Override
             public void onNext(String s) {
                 System.out.println("onNext");
+            }
+        });
+    }
+
+
+    //simple timer
+    private void simpleTimer() {
+        Observable.just(1).timer(3, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
+            @Override
+            public void onCompleted() {
+                System.out.println("Timer Complte");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                System.out.println("Next:" + aLong);
             }
         });
     }
