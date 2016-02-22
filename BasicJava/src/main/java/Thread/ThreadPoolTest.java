@@ -1,7 +1,5 @@
 package Thread;
 
-import sun.org.mozilla.javascript.internal.ScriptStackElement;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
