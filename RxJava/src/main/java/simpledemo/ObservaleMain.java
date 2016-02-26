@@ -3,14 +3,16 @@ package simpledemo;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Action1;
+import rx.functions.*;
+import rx.observables.GroupedObservable;
 
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 基础理解
- * <p/>
+ * <p>
  * Created by yantinggeng on 2015/10/19.
  */
 public class ObservaleMain {
@@ -18,7 +20,18 @@ public class ObservaleMain {
     public static void main(String[] args) {
         ObservaleMain test = new ObservaleMain();
 //        test.simpleOnCompleteAndOnError();
-        test.simpleTimer();
+//        test.simpleTimer();
+//        test.simpleScan();
+//        test.simpleGroupBy();
+//        test.simpleBuffer();
+//        test.simpleWindow();
+//        test.simpleCast();
+//        test.simpleMerge();
+//        test.simpleZip();
+//        test.simpleJoin();
+//        test.simpleCombineLatest();
+//        test.simpleStartWith();
+        test.simpleDefer();
     }
 
     //最基本的使用方式
@@ -189,8 +202,8 @@ public class ObservaleMain {
     }
 
     //doOnComplete and doOnError
-    private void simpleOnCompleteAndOnError(){
-        Observable.just("a","b").doOnCompleted(new Action0() {
+    private void simpleOnCompleteAndOnError() {
+        Observable.just("a", "b").doOnCompleted(new Action0() {
             @Override
             public void call() {
                 System.out.println("doOnCompleted");
@@ -237,5 +250,211 @@ public class ObservaleMain {
             }
         });
     }
+
+    //simple scan
+    private void simpleScan() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        Observable.from(words).scan(new Func2<String, String, String>() {
+            @Override
+            public String call(String s, String s2) {
+                return s2;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+
+    //simple group by
+    private void simpleGroupBy() {
+        String[] words = {"长度大于2", "1", "1", "有三个", "长度大于2", "1"};
+        Observable<GroupedObservable<Integer, String>> groupedObservableObservable = Observable.from(words).groupBy(new Func1<String, Integer>() {
+            @Override
+            public Integer call(String s) {
+                if (s.length() > 2) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            }
+        });
+        Observable.concat(groupedObservableObservable).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+    //simple buffer
+    private void simpleBuffer() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        Observable.from(words).buffer(2).subscribe(new Action1<List<String>>() {
+            @Override
+            public void call(List<String> strings) {
+                for (String string : strings) {
+                    System.out.print(string);
+                }
+                System.out.println();
+            }
+        });
+    }
+
+    //simple windows
+    private void simpleWindow() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        Observable.from(words).window(2).subscribe(new Action1<Observable<String>>() {
+            @Override
+            public void call(Observable<String> stringObservable) {
+                stringObservable.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        System.out.println(stringObservable.toString());
+                        System.out.println(s);
+                    }
+                });
+            }
+        });
+    }
+
+    //simple cast
+    private void simpleCast() {
+        Integer[] numbers = {1, 2, 3, 4};
+        Observable.from(numbers).cast(Integer.class).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+    //simple merge
+    private void simpleMerge() {
+        String[] numbers = {"1", "2", "3", "4"};
+        String[] words = {"第一个", "第二个", "第三个"};
+        Observable<String> integerObservable = Observable.from(numbers);
+        Observable<String> stringObservable = Observable.from(words);
+        Observable<String> mergeWith = Observable.merge(integerObservable, stringObservable);
+        mergeWith.subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+        integerObservable.sample(500, TimeUnit.MICROSECONDS).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+
+    //simple zip
+    private void simpleZip() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        String[] numbers = {"1", "2", "3", "4"};
+        Observable<String> stringObservable = Observable.from(words);
+        Observable<String> integerObservable = Observable.from(numbers);
+        Observable.zip(stringObservable, integerObservable, new Func2<String, String, String>() {
+            @Override
+            public String call(String s, String s2) {
+                return s + ":" + s2;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+
+    //simple join
+    private void simpleJoin() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        String[] numbers = {"1", "2", "3", "4"};
+        Observable<String> stringObservable = Observable.from(words);
+        Observable<String> integerObservable = Observable.from(numbers);
+        stringObservable.join(integerObservable, new Func1<String, Observable<String>>() {
+            @Override
+            public Observable<String> call(String s) {
+                return Observable.just(s + "left:");
+            }
+        }, new Func1<String, Observable<Object>>() {
+            @Override
+            public Observable<Object> call(String s) {
+                return Observable.just(s + "right:");
+            }
+        }, new Func2<String, String, String>() {
+            @Override
+            public String call(String s, String s2) {
+                return s + s2;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+
+    }
+
+    //simple combineLatest
+    private void simpleCombineLatest() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        String[] numbers = {"1", "2", "3", "4"};
+        Observable<String> stringObservable = Observable.from(words);
+        Observable<String> integerObservable = Observable.from(numbers);
+        Observable.combineLatest(stringObservable, integerObservable, new Func2<String, String, String>() {
+            @Override
+            public String call(String s, String s2) {
+                return s + "+" + s2;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+    //simple switch
+    private void simpleStartWith() {
+        String[] words = {"第一个", "第二个", "第三个"};
+        Observable<String> stringObservable = Observable.from(words);
+        stringObservable.startWith("StartWith").subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+
+    //simple defer
+    private void simpleDefer() {
+        Observable<Object> deferObserverable = Observable.defer(new Func0<Observable<Object>>() {
+            @Override
+            public Observable<Object> call() {
+                System.out.println("done");
+                return Observable.just("Hello");
+            }
+        });
+        deferObserverable.subscribe(new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+
+            }
+        });
+
+
+
+
+    }
+
 
 }
