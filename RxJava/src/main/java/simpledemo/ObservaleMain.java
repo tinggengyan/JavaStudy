@@ -5,6 +5,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.functions.*;
 import rx.observables.GroupedObservable;
+import rx.schedulers.Schedulers;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -31,7 +32,9 @@ public class ObservaleMain {
 //        test.simpleJoin();
 //        test.simpleCombineLatest();
 //        test.simpleStartWith();
-        test.simpleDefer();
+//        test.simpleDefer();
+//        test.simpleConcat();
+        test.simpleConcat2();
     }
 
     //最基本的使用方式
@@ -450,11 +453,102 @@ public class ObservaleMain {
 
             }
         });
-
-
-
-
     }
 
+
+    //使用concat和first做缓存,依次检查memory、disk和network中是否存在数据，任何一步一旦发现数据后面的操作都不执行。
+    private void simpleConcat() {
+        Observable<String> memory = Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                System.out.println("here is memory");
+                String memoryCache = "memory cache";
+                if (memoryCache != null) {
+                    //调用next表示传递到subscriber那
+                    subscriber.onNext(memoryCache);
+                } else {
+                    //调用complete表示不做处理，处理下个
+                    subscriber.onCompleted();
+                    System.out.println("memory over");
+                }
+            }
+        });
+        Observable<String> disk = Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                System.out.println("here is disk");
+                String cachePref = "disk cache";
+                if (cachePref != null) {
+                    subscriber.onNext(cachePref);
+                } else {
+                    subscriber.onCompleted();
+                }
+            }
+        });
+
+        Observable<String> network = Observable.just("network");
+        //依次检查memory、disk、network
+        Observable.concat(memory, disk, network)
+                .first()
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("Subscriber is onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println("you have choose the " + s);
+                    }
+                });
+    }
+
+
+    //按照顺序，发射源数据，直到前一个结束了，才发射后一个。
+    private void simpleConcat2() {
+        Observable<String> a = Observable.just("A");
+        Observable<String> b = Observable.just("B");
+        Observable<String> c = Observable.just("C");
+        Observable.concat(a, b, c).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+
+    //emit without error
+    private void simpleCatch() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+            }
+        }).filter(new Func1<String, Boolean>() {
+            @Override
+            public Boolean call(String s) {
+                return null;
+            }
+        }).subscribe(new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        });
+    }
 
 }
