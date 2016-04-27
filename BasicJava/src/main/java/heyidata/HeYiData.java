@@ -17,15 +17,15 @@ public class HeYiData {
 
     static double startTime = 0;
     static double endTime = 0;
+    static float counts = 1;
 
     static ArrayList<Integer> allTimes = new ArrayList<Integer>();
     static HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
-    static ArrayList<String> allData = new ArrayList<String>();
 
     // init the all time
     static void init() {
         // 4/5 00:00
-        int first = 1459785600;
+        int first = 1459872000;
         // 一天144个10分钟
         for (int i = 0; i < 144; i++) {
             first += 600;
@@ -39,60 +39,58 @@ public class HeYiData {
         init();
         try {
             read();
+            outPut();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        deal();
-        outPut();
         endTime = System.currentTimeMillis();
         System.out.println("总共耗时：" + (endTime - startTime) / 60000.0 + "分钟");
+        System.out.println("共读取了"+counts);
     }
 
     // read into the memory
     static void read() throws Exception {
-        double s = System.currentTimeMillis();
         BufferedReader br = new BufferedReader(new FileReader(
-                "F:\\微博数据\\如家\\weibo_freshdata.2016-04-05"));
+                "F:\\微博数据\\如家\\weibo_freshdata.2016-04-06"));
         String line = br.readLine();// 一次读入一行，直到读入null为文件结束
         while (line != null) {
-            allData.add(line);
+            counts++;
+            try {
+                deal(line);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
             line = br.readLine(); // 接着读下一行
         }
-        double e = System.currentTimeMillis();
-        System.out.println("读取耗时：" + (e - s) / 60000.0 + "分钟");
     }
 
-    static void deal() {
-        double s = System.currentTimeMillis();
+    static void deal(String line) {
         String[] split;
         String content = "";
         Integer time = 0;
-        for (String line : allData) {
-            split = line.split("\t");
-            if (split[3].equals("1")) {
-                time = Integer.valueOf(split[17]);
-                content = split[22];
-            }
-            if (split[3].equals("0")) {
-                time = Integer.valueOf(split[17]);
-                content = split[9];
-            }
-            if (hasKey(content)) {
-                for (int i = allTimes.size() - 1; i >= 0; i--) {
-                    if (time > allTimes.get(i) - 600 && time <= allTimes.get(i)) {
-                        if (result.containsKey(allTimes.get(i))) {
-                            int integer = result.get(allTimes.get(i));
-                            ++integer;
-                            result.put(allTimes.get(i), integer);
-                        } else {
-                            result.put(allTimes.get(i), 1);
-                        }
+        split = line.split("\t");
+        if (split[3].equals("1")) {
+            time = Integer.valueOf(split[17]);
+            content = split[22];
+        }
+        if (split[3].equals("0")) {
+            time = Integer.valueOf(split[17]);
+            content = split[9];
+        }
+        if (hasKey(content)) {
+            for (int i = allTimes.size() - 1; i >= 0; i--) {
+                if (time > allTimes.get(i) - 600 && time <= allTimes.get(i)) {
+                    if (result.containsKey(allTimes.get(i))) {
+                        int integer = result.get(allTimes.get(i));
+                        ++integer;
+                        result.put(allTimes.get(i), integer);
+                    } else {
+                        result.put(allTimes.get(i), 1);
                     }
                 }
             }
         }
-        double e = System.currentTimeMillis();
-        System.out.println("处理耗时：" + (e - s) / 60000.0 + "分钟");
     }
 
     static boolean hasKey(String content) {
@@ -101,7 +99,7 @@ public class HeYiData {
     }
 
     static void outPut() {
-        double s=System.currentTimeMillis();
+        double s = System.currentTimeMillis();
         String outPrintSql = "INSERT INTO rujia VALUES(?,?);";
         DBHelper dbHelper = new DBHelper();// 创建DBHelper对象
         PreparedStatement pst = dbHelper.getPst(outPrintSql);
