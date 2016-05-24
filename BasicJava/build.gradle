@@ -11,4 +11,6 @@ repositories {
 
 dependencies {
     testCompile "junit:junit:4.11"  // Or whatever version
+    compile 'io.reactivex:rxjava:1.0.14'
+
 }

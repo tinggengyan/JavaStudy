@@ -12,7 +12,7 @@ import java.util.Set;
 public class FileReadMain {
     public static void main(String[] args) {
         try {
-//            readfile("F:\\迅雷下载\\data");
+            readfile("F:\\迅雷下载\\data");
             outPut();
         } catch (IOException e) {
             e.printStackTrace();

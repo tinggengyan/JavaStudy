@@ -6,7 +6,13 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.zip.ZipFile;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * source from http://pingguohe.net/2016/03/21/Dynimac-write-infomation-into-apk.html
@@ -17,6 +23,50 @@ import java.util.zip.ZipFile;
  */
 public class WriteComment2APK {
 
+    private static HashMap<String, String> fileCache = new HashMap<>();
+
+    public static String getSyntheticApk(String comment) {
+        if (fileCache.containsKey(comment)) {
+            return fileCache.get(comment);
+        }
+        try {
+            File file = copyFile();
+            writeApk(file, comment);
+            //update the cache
+            fileCache.put(comment, file.getAbsolutePath());
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * 将源文件复制到一个指定的位置
+     *
+     * @return 返回目标文件
+     * @throws IOException
+     */
+    public static File copyFile() throws IOException {
+        String originApk = "E:\\workspace\\AndroidStudio\\Study\\app\\app-release.apk";
+        File originFile = new File(originApk);
+        long timeMillis = System.currentTimeMillis();
+        String dest = "E:\\test\\" + timeMillis;
+        Path path = Paths.get(dest);
+        Path directories = Files.createDirectories(path);
+        File destinationFile = new File(directories.toString() + "\\" + originFile.getName());
+        Files.copy(originFile.toPath(), destinationFile.toPath(), REPLACE_EXISTING);
+        return destinationFile;
+    }
+
+
+    /**
+     * 向APK中写入指定内容
+     *
+     * @param file    待写入的文件
+     * @param comment 待写入的内容
+     */
     public static void writeApk(File file, String comment) {
         ZipFile zipFile = null;
         ByteArrayOutputStream outputStream = null;
@@ -56,7 +106,6 @@ public class WriteComment2APK {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 
