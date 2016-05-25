@@ -49,7 +49,7 @@ public class WriteComment2APK {
      * @throws IOException
      */
     public static File copyFile() throws IOException {
-        String originApk = "E:\\workspace\\AndroidStudio\\Study\\app\\app-release.apk";
+        String originApk = "E:\\workspace\\work\\lvmama_android_7.6.2\\app\\RELEASE_7.6.1_online.apk";
         File originFile = new File(originApk);
         long timeMillis = System.currentTimeMillis();
         String dest = "E:\\test\\" + timeMillis;

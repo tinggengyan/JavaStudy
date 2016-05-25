@@ -5,6 +5,6 @@ package deeplinkapk;
  */
 public class DeepLinkMain {
     public static void main(String[] args) {
-        String syntheticApk = WriteComment2APK.getSyntheticApk("Hello lvmama");
+        String syntheticApk = WriteComment2APK.getSyntheticApk("http://m.lvmama.com/tuan/product-277959?losc=082900");
     }
 }
