@@ -48,8 +48,8 @@ public class WriteComment2APK {
      * @return 返回目标文件
      * @throws IOException
      */
-    public static File copyFile() throws IOException {
-        String originApk = "E:\\workspace\\work\\lvmama_android_7.6.2\\app\\RELEASE_7.6.1_online.apk";
+    public static synchronized File copyFile() throws IOException {
+        String originApk = "E:\\workspace\\work\\lvmama_android_7.6.1\\app\\ANDROID_DEFAULT_7.6.1.apk";
         File originFile = new File(originApk);
         long timeMillis = System.currentTimeMillis();
         String dest = "E:\\test\\" + timeMillis;
@@ -78,17 +78,23 @@ public class WriteComment2APK {
                 return;
             }
 
+            // comment to the bytes
             byte[] byteComment = comment.getBytes();
             outputStream = new ByteArrayOutputStream();
-
+            // write the comment content data
             outputStream.write(byteComment);
+            // write the comment's length
             outputStream.write(short2Stream((short) byteComment.length));
 
             byte[] data = outputStream.toByteArray();
 
             accessFile = new RandomAccessFile(file, "rw");
+
             accessFile.seek(file.length() - 2);
+            //the all comment struct's length
             accessFile.write(short2Stream((short) data.length));
+            // write the comment struct
+            System.out.println("string data:"+new String(data));
             accessFile.write(data);
         } catch (IOException e) {
             e.printStackTrace();
