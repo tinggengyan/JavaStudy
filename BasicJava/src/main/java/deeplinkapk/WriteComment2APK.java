@@ -77,7 +77,7 @@ public class WriteComment2APK {
             if (zipComment != null) {
                 return;
             }
-
+            /* the conetent to be writen */
             // comment to the bytes
             byte[] byteComment = comment.getBytes();
             outputStream = new ByteArrayOutputStream();
@@ -88,13 +88,15 @@ public class WriteComment2APK {
 
             byte[] data = outputStream.toByteArray();
 
+            /* write the content to the apk */
+
             accessFile = new RandomAccessFile(file, "rw");
 
             accessFile.seek(file.length() - 2);
             //the all comment struct's length
             accessFile.write(short2Stream((short) data.length));
             // write the comment struct
-            System.out.println("string data:"+new String(data));
+            System.out.println("string data:" + new String(data));
             accessFile.write(data);
         } catch (IOException e) {
             e.printStackTrace();
