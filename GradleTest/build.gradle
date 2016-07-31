@@ -2,7 +2,6 @@ group 'cn.steve'
 version '1.0'
 
 apply plugin: 'java'
-apply from: '/config.gradle'
 
 sourceCompatibility = 1.5
 
