@@ -1,0 +1,71 @@
+task myTask {
+    println("Hello world")//配置阶段就会执行
+}
+
+
+task myTask2 {
+    doLast {
+        println("Hello world")//调用阶段就会执行
+    }
+}
+
+task myTask3 << {
+    println("Hello world")//调用阶段就会执行,这个是doLast的简写版
+}
+
+
+
+def myClosure = { println('hello world') }
+
+//excute our closure
+myClosure()
+
+
+def myClosure2 = {
+    String str -> println str
+}
+
+myClosure2('hello')
+
+//当只有一个参数的时候
+
+def myClosure3 = {
+    println(it)
+}
+myClosure3('hello')
+
+//多个参数的时候
+
+def myClosure4 = {
+    String str, int n ->
+        println('$str': '$n')
+}
+
+myClosure4('my', 21)
+
+def myClosure5 = {
+    str, num ->
+        println('$str': '$num')
+}
+
+//Closure中可以使用当前上下文中的变量。默认情况下，当前的上下文就是closure被创建时所在的类：
+
+def myVar = 'hh'
+def myClosure6 = {
+    println(myVar)
+}
+
+myClosure6()
+
+////通过Closure#setDelegate(),可以改变上下文
+
+def myClosure7 = {
+    println(myVar2)
+}
+MyClass m = new MyClass()
+myClosure7.setDelegate(m)
+
+class MyClass {
+
+    def myVar2 = 'hello from MyClass'
+}
