@@ -1,21 +1,21 @@
 task myTask {
-    println("Hello world")//配置阶段就会执行
+    println("Hello world-配置阶段就会执行")//配置阶段就会执行
 }
 
 
 task myTask2 {
     doLast {
-        println("Hello world")//调用阶段就会执行
+        println("Hello world-调用阶段就会执行")//调用阶段就会执行
     }
 }
 
 task myTask3 << {
-    println("Hello world")//调用阶段就会执行,这个是doLast的简写版
+    println("Hello world-调用阶段就会执行,这个是doLast的简写版")//调用阶段就会执行,这个是doLast的简写版
 }
 
 
 
-def myClosure = { println('hello world') }
+def myClosure = { println('hello world myClosure') }
 
 //excute our closure
 myClosure()
@@ -25,32 +25,34 @@ def myClosure2 = {
     String str -> println str
 }
 
-myClosure2('hello')
+myClosure2('hello myClosure2，传递一个参数')
 
 //当只有一个参数的时候
 
 def myClosure3 = {
     println(it)
 }
-myClosure3('hello')
+myClosure3('hello，myClosure3，形参不指定')
 
 //多个参数的时候
 
 def myClosure4 = {
     String str, int n ->
-        println('$str': '$n')
+        println(str: n)
 }
 
-myClosure4('my', 21)
+myClosure4('myClosure4,指定多个参数', 21)
 
 def myClosure5 = {
     str, num ->
         println('$str': '$num')
 }
 
+myClosure5('myClosure5,指定多个参数,但是不指定类型', 21)
+
 //Closure中可以使用当前上下文中的变量。默认情况下，当前的上下文就是closure被创建时所在的类：
 
-def myVar = 'hh'
+def myVar = '默认是当前的上下文'
 def myClosure6 = {
     println(myVar)
 }
@@ -67,5 +69,10 @@ myClosure7.setDelegate(m)
 
 class MyClass {
 
-    def myVar2 = 'hello from MyClass'
+    def myVar2 = 'hello，当前上下文被指定来自于MyClass'
+}
+
+
+task delegateTask << {
+    myClosure7()
 }
