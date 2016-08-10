@@ -3,12 +3,6 @@ version '1.0'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
-
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    compile 'io.reactivex:rxjava:1.0.14'
 }

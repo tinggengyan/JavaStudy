@@ -5,10 +5,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.functions.*;
 import rx.observables.GroupedObservable;
-import rx.schedulers.Schedulers;
-
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 /**
