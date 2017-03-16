@@ -1,4 +1,4 @@
-package concurrency;
+package concurrency.effective;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
@@ -18,6 +18,7 @@ public class CountDownLatchTest {
                 public void run() {
                     ready.countDown(); // Tell timer we're ready
                     try {
+                        System.out.println("start.await()");
                         start.await(); // Wait till peers are ready
                         action.run();
                     } catch (InterruptedException e) {
@@ -28,17 +29,21 @@ public class CountDownLatchTest {
                 }
             });
         }
+        System.out.println("ready.await()");
         ready.await(); // Wait for all workers to be ready
         long startNanos = System.nanoTime();
+        System.out.println("startNanos:" + startNanos);
+        System.out.println("start.countDown():");
         start.countDown(); // And they're off!
+        System.out.println("done.await():");
         done.await(); // Wait for all workers to finish
         return System.nanoTime() - startNanos;
     }
 
     public static void main(String[] args) {
         try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            long l = time(executor, 1, new Runnable() {
+            ExecutorService executor = Executors.newCachedThreadPool();
+            long l = time(executor, 2, new Runnable() {
                 @Override
                 public void run() {
                     System.out.println("hhahah");

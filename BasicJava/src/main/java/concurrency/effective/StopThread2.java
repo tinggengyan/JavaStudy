@@ -1,21 +1,13 @@
-package concurrency;
+package concurrency.effective;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Steve on 2017/3/13.
  */
-public class StopThread {
-    // 读和写都需要加锁，否则不能正确的关闭线程。
-    private static boolean stopRequested;
-
-    private static synchronized void stop() {
-        stopRequested = true;
-    }
-
-    private static synchronized boolean canStop() {
-        return stopRequested;
-    }
+public class StopThread2 {
+    // volatile 不能确保互斥访问，但是能确保一个线程读取该域的值的时候，都将看到最近刚刚被写入的值，对于不需要互斥，仅仅是为了通信而已，可以采用这种简单的方式。
+    private static  volatile boolean stopRequested;
 
 
     public static void main(String[] args) {
@@ -23,7 +15,7 @@ public class StopThread {
             @Override
             public void run() {
                 double i = 0;
-                while (!canStop()) {
+                while (!stopRequested) {
                     i++;
                 }
             }
@@ -32,8 +24,7 @@ public class StopThread {
 
         try {
             TimeUnit.SECONDS.sleep(1);
-            stop();
-//            stopRequested = true;
+            stopRequested = true;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

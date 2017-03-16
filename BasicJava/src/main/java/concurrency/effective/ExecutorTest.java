@@ -1,4 +1,4 @@
-package concurrency;
+package concurrency.effective;
 
 import java.util.List;
 import java.util.concurrent.*;
