@@ -1,6 +1,7 @@
 package Patterns.decorator;
 
 /**
+ * 待被包装的具体的构建类(ConcreteComponent)
  * Created by yantinggeng on 2015/12/15.
  */
 public class SimpleWindow implements Window {

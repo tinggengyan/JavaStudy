@@ -1,7 +1,8 @@
 package Patterns.decorator;
 
 /**
- * 装饰者的抽象类
+ * 装饰者的抽象类(Decorator)
+ *
  * <p/>
  * Created by yantinggeng on 2015/12/15.
  */

@@ -1,6 +1,8 @@
 package Patterns.decorator;
 
 /**
+ * 实实在在的装饰者实现类(ConcreteDecorator)
+ * <p>
  * Created by yantinggeng on 2015/12/15.
  */
 public class HorizontalScrollBarDecorator extends WindowDecorator {
