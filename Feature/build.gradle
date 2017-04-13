@@ -6,3 +6,8 @@ repositories {
 
 dependencies {
 }
+
+compileJava {
+    // 使得方法参数的名字能保留在Java字节码中
+    options.compilerArgs << '-parameters'
+}
