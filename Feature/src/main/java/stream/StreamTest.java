@@ -2,6 +2,7 @@ package stream;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 把函数式编程带到java中,Stream API可以极大提供Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。
@@ -26,6 +27,12 @@ public class StreamTest {
                 .sum();
 
         System.out.println("Total points: " + totalPointsOfOpenTasks);
+
+        List<Integer> integerList = Arrays.asList(1, 2, 3, 4);
+        integerList
+            .stream()
+            .filter(s -> s > 2)
+            .forEach(System.out::println);
 
 
     }
