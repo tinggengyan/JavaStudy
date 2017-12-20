@@ -20,6 +20,17 @@ class Bat : CanFly {
 
 fun main(args: Array<String>) {
     var f: CanFly = Bat()
-    var b : CanFly = Bird(f)
+    var b: CanFly = Bird(f)
     b.fly()
+
+
+    val a: CanFly by lazy {
+        println("初始化了啊")
+        Bat()
+    }
+
+//    a.fly()
+
+
+
 }
