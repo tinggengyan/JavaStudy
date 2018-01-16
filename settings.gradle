@@ -13,4 +13,5 @@ include 'LeetCode'
 include 'Feature'
 include 'Kotlin'
 include 'GroovyModule'
+include 'algorithm'
 
