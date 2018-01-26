@@ -1,4 +1,4 @@
-package sort;
+package com.steve.sort;
 
 /**
  * Created by steveyan on 4/7/17.

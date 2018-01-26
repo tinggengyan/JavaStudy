@@ -1,4 +1,4 @@
-package pkg;
+package javapoet;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
