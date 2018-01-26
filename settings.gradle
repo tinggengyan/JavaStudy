@@ -3,10 +3,8 @@ println 'This is executed during the initialization phase.(编译初始化阶段
 
 rootProject.name = 'JavaTest'
 include 'RxJava'
-include 'RxJava'
 include 'BasicJava'
 include 'GradleTest'
-include 'Dagger'
 include 'Dagger2'
 include 'Retrofit'
 include 'LeetCode'
