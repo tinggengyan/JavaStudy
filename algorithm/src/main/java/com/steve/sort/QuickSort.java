@@ -5,45 +5,47 @@ package com.steve.sort;
  */
 public class QuickSort {
 
-    /**
-     * 查找出中轴（默认是最低位low）的在numbers数组排序后所在位置
-     *
-     * @param numbers 带查找数组
-     * @param low     开始位置
-     * @param high    结束位置
-     * @return 中轴所在位置
-     */
-    public static int getMiddle(int[] numbers, int low, int high) {
-        //数组的第一个作为中轴
-        int temp = numbers[low];
-        while (low < high) {
-            while (low < high && numbers[high] > temp) {
-                high--;
-            }
-            //比中轴小的记录移到低端
-            numbers[low] = numbers[high];
-            while (low < high && numbers[low] < temp) {
-                low++;
-            }
-            //比中轴大的记录移到高端
-            numbers[high] = numbers[low];
-        }
-        //中轴记录到尾
-        numbers[low] = temp;
-        // 返回中轴的位置
-        return low;
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 
-    /**
-     * @param numbers 带排序数组
-     * @param low     开始位置
-     * @param high    结束位置
-     */
-    public static void quickSort(int[] numbers, int low, int high) {
-        if (low < high) {
-            int middle = getMiddle(numbers, low, high); //将numbers数组进行一分为二
-            quickSort(numbers, low, middle - 1);   //对低字段表进行递归排序
-            quickSort(numbers, middle + 1, high); //对高字段表进行递归排序
+
+    private static int partition(int[] array, int start, int end) {
+        int pivot = array[end];
+        int lowerIndex = start;// 记录比标兵小的，最近一个需要替换的位置
+        for (int i = start; i < end; i++) {
+            if (array[i] < pivot) {
+                swap(array, i, lowerIndex);
+                lowerIndex++;
+            }
+        }
+        swap(array, lowerIndex, end);
+        return lowerIndex;
+    }
+
+
+    private static void qs(int[] array, int start, int end){
+        if (start < end) {
+            int PIndex = partition(array, start, end);
+            qs(array, start, PIndex - 1);
+            qs(array, PIndex + 1, end);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int[] num = new int[]{7, 1, 2, 4, 8, 9, 5, 3, 6, 0};
+
+        int start = 0;
+        int end = num.length - 1;
+
+        qs(num,start,end);
+
+
+        for (int i : num) {
+            System.out.println(i);
         }
 
     }
