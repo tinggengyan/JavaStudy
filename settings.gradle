@@ -1,11 +1,5 @@
 rootProject.name = 'JavaTest'
 
-
 include 'BasicJava'
 include 'Feature'
-
-
-include 'LeetCode'
-
-include 'algorithm'
 
