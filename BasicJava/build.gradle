@@ -5,15 +5,54 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency {
+        DependencyResolveDetails details ->
+//        if (details.requested.group == 'org.gradle') {
+//            details.useVersion '1.4'
+//            details.because 'API breakage in higher versions'
+//        }
+//            println("依赖处理:group:" + details.requested.group)
+    }
+}
+
+
 dependencies {
+//    println("依赖块: dependencies")
     testCompile "junit:junit:4.11"  // Or whatever version
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'com.google.code.gson:gson:2.7'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.auto.service:auto-service:1.0-rc2'
     compile 'com.squareup:javapoet:1.7.0'
+}
+
+
+task printGuavaMetadata {
+    dependsOn configurations.compileClasspath
+
+    doLast {
+        ArtifactResolutionQuery query = dependencies.createArtifactResolutionQuery()
+                .forModule('io.reactivex', 'rxjava', '1.0.14')
+                .withArtifacts(MavenModule, MavenPomArtifact)
+        ArtifactResolutionResult result = query.execute()
+
+        for (component in result.resolvedComponents) {
+            Set<ArtifactResult> mavenPomArtifacts = component.getArtifacts(MavenPomArtifact)
+            ArtifactResult guavaPomArtifact = mavenPomArtifacts.find { it.file.name == 'rxjava-1.0.14.pom' }
+            def xml = new XmlSlurper().parse(guavaPomArtifact.file)
+            println guavaPomArtifact.file
+            println xml.name
+            println xml.description
+            println xml.distribution
+        }
+    }
 }
